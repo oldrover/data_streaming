@@ -33,9 +33,7 @@ class Producer:
         self.value_schema = value_schema
         self.num_partitions = num_partitions
         self.num_replicas = num_replicas
-
-        # Configure the broker properties below. Make sure to reference the project README
-        # and use the Host URL for Kafka and Schema Registry!        
+        
         self.broker_properties = {"bootstrap.servers": BROKER_URL,
                                   "schema.registry.url": SCHEMA_REGISTRY_URL}        
         

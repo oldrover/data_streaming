@@ -47,12 +47,7 @@ class Station(Producer):
 
     def run(self, train, direction, prev_station_id, prev_direction):
         """Simulates train arrivals at this station"""
-        #
-        #
-        # TODO: Complete this function by producing an arrival message to Kafka
-        #
-        #
-        logger.info("arrival kafka integration incomplete - skipping")
+       
         self.producer.produce(
             topic=self.topic_name,
             key={"timestamp": self.time_millis()},
