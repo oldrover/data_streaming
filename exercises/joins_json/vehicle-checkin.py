@@ -90,5 +90,17 @@ checkinStatusDF = vehicleStatusSelectStarDF.join(vehicleCheckinSelectStarDF, exp
 # |             1445|  New Mexico|          436|         298473|1602364379489|    Michigan|              1445|    In|
 # |             1445|       Texas|          434|         298492|1602364379489|    Michigan|              1445|    In|
 # +-----------------+------------+-------------+---------------+-------------+------------+------------------+------+
-checkinStatusDF.writeStream.outputMode("append").format("console").start().awaitTermination()
+
+# write to console
+#checkinStatusDF.writeStream.outputMode("append").format("console").start().awaitTermination()
+
+#write to kafka stream
+checkinStatusDF.selectExpr("cast(statusTruckNumber as string) as key", "to_json(struct(*)) as value")\
+    .writeStream\
+    .format("kafka")\
+    .option("kafka.bootstrap.servers", "localhost:9092")\
+    .option("topic", "checkin-status")\
+    .option("checkpointLocation", "/tmp/kafkacheckpoint")\
+    .start()\
+    .awaitTermination()
 
