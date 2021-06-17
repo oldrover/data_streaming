@@ -26,13 +26,12 @@ class Station(Producer):
             .replace("-", "_")
             .replace("'", "")
         )
-
-        topic_name = f"com.cta.station.arrivals.{station_name}"
+     
         super().__init__(
-            topic_name,
+            topic_name="org.chicago.cta.station.arrivals.v1",
             key_schema=Station.key_schema,
             value_schema=Station.value_schema,
-            num_partitions=4,
+            num_partitions=3,
             num_replicas=1,
         )
 
@@ -50,13 +49,15 @@ class Station(Producer):
        
         self.producer.produce(
             topic=self.topic_name,
-            key={"timestamp": self.time_millis()},
+            key={"timestamp": self.time_millis()}, 
+            key_schema=self.key_schema,
+            value_schema=self.value_schema,
             value={
                 "station_id": self.station_id,
                 "train_id": train.train_id,
                 "direction": direction,
                 "line": self.color.name,
-                "train_status": train.status,
+                "train_status": train.status.name,
                 "prev_station_id": prev_station_id,
                 "prev_direction": prev_direction   
             },

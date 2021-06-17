@@ -32,7 +32,7 @@ class Weather(Producer):
     def __init__(self, month):
        
         super().__init__(
-            f"com.cta.weather.{month}",
+            topic_name="org.chicago.cta.weather.v1",
             key_schema=Weather.key_schema,
             value_schema=Weather.value_schema,
             num_partitions=1,
@@ -73,7 +73,7 @@ class Weather(Producer):
             data=json.dumps(
                 {
                     "key_schema": json.dumps(Weather.key_schema),
-                    "value_schema": json_dumps(Weather.value_schema),
+                    "value_schema": json.dumps(Weather.value_schema),
                     "records": [
                         {
                             "key": {"timestamp": self.time_millis()},
