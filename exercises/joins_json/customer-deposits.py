@@ -7,7 +7,7 @@ from pyspark.sql.types import StructField, StructType, StringType, FloatType, Bo
 atmVisitsMessageSchema = StructType(
     [
         StructField("accountNumber", StringType()),
-        StructField("amount", StringType()),
+        StructField("amount", FloatType()),
         StructField("dateAndTime", StringType())
     ]
 )
@@ -41,7 +41,7 @@ atmVisitsStreamingDF.withColumn("value", from_json("value", atmVisitsMessageSche
     .select(col("value.*"))\
     .createOrReplaceTempView("BankDeposits")
 
-atmVisitsSelectStarDF = spark.sql("SELECT * FROM BankDeposits")
+atmVisitsSelectStarDF = spark.sql("SELECT * FROM BankDeposits WHERE amount > 200.00")
 
 customersRawStreamingDF = spark\
     .readStream\
