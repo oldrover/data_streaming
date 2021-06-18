@@ -57,7 +57,7 @@ zSetEntriesDecodedStreamingDF\
     .select(col("customerLocation.*"))\
     .createOrReplaceTempView("CustomerLocation")
 
-customerLocationStreamingDF = spark.sql("SELECT * FROM CustomerLocation")
+customerLocationStreamingDF = spark.sql("SELECT * FROM CustomerLocation WHERE location IS NOT NULL")
 
 # output will look something like this:
 # +-------------+---------+
