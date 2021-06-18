@@ -69,7 +69,7 @@ zSetDecodedEntriesStreamingDF\
     .select(col('payment.*'))\
     .createOrReplaceTempView("Payment")\
 
-paymentStreamingDF = spark.sql("select reservationId, amount from Payment")
+paymentStreamingDF = spark.sql("select reservationId, amount from Payment where amount is not null")
 
 # this takes the stream and "sinks" it to the console as it is updated one message at a time (null means the JSON parsing didn't match the fields in the schema):
 # {"reservationId":"9856743232","amount":"946.88"}
