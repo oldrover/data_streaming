@@ -3,10 +3,55 @@ from pyspark.sql.functions import from_json, to_json, col, unbase64, base64, spl
 from pyspark.sql.types import StructField, StructType, StringType, BooleanType, ArrayType, DateType
 
 # TO-DO: create a StructType for the Kafka redis-server topic which has all changes made to Redis - before Spark 3.0.0, schema inference is not automatic
+#{"key":"__Customer__",
+#"existType":"NONE",
+#"Ch":false,
+#"Incr":false,
+#"zSetEntries":[{
+#"element":"__{"customerName":"Sam Test","email":"sam.test@test.com","phone":"8015551212","birthDay":"2001-01-03"}",
+#"Score":0.0
+#}__],
+#"zsetEntries":[{
+#"element":"{"customerName":"Sam Test","email":"sam.test@test.com","phone":"8015551212","birthDay":"2001-01-03"}",
+#"score":0.0
+#}]
+#}
+
+redisMessageSchema = StructType(
+    [
+        StructField("key", StringType()), 
+        StructField("existType", StringType()),
+        StructField("ch", StringType()),
+        StructField("incr",BooleanType()),
+        StructField("zSetEntries", ArrayType( \
+            StructType([
+                StructField("element", StringType()),\
+                StructField("score", StringType())   \
+            ]))                                      \
+        )
+    ]
+)
 
 # TO-DO: create a StructType for the Customer JSON that comes from Redis- before Spark 3.0.0, schema inference is not automatic
+#"{"customerName":"Steady Senior","email":"steady@stedi.fit","phone":"8015551212","birthDay":"1901-01-01"}"
+customerSchema = StructType(
+    [
+        StructField("customerName", StringType()),
+        StructField("email", StringType()),
+        StructField("phone", StringType()),
+        StructField("birthDay", StringType())
+    ]
+)
 
 # TO-DO: create a StructType for the Kafka stedi-events topic which has the Customer Risk JSON that comes from Redis- before Spark 3.0.0, schema inference is not automatic
+#{"customer":"Jason.Mitra@test.com","score":7.0,"riskDate":"2020-09-14T07:54:06.417Z"}
+customerRiskSchema = StructType(
+    [
+        StructField("customer", StringType()),
+        StructField("score", FloatType()),
+        StructField("riskDate", StringType())
+    ]
+)
 
 #TO-DO: create a spark application object
 
