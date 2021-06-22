@@ -13,7 +13,7 @@ customerRiskSchema = StructType(
 
 spark = SparkSession.builder.appName("eventsToConsole").getOrCreate()
 
-# TO-DO: using the spark application object, read a streaming dataframe from the Kafka topic stedi-events as the source
+# using the spark application object, read a streaming dataframe from the Kafka topic stedi-events as the source
 # Be sure to specify the option that reads all the events from the topic including those that were published before you started the spark stream
 stediEventsRawStreamingDF = spark\
     .readStream\
@@ -23,10 +23,10 @@ stediEventsRawStreamingDF = spark\
     .option("startingOffsets", "earliest")\
     .load()
                                    
-# TO-DO: cast the value column in the streaming dataframe as a STRING 
+# cast the value column in the streaming dataframe as a STRING 
 stediEventsStreamingDF = stediEventsRawStreamingDF.selectExpr("cast(value as string) value")
 
-# TO-DO: parse the JSON from the single column "value" with a json object in it, like this:
+# parse the JSON from the single column "value" with a json object in it, like this:
 # +------------+
 # | value      |
 # +------------+
@@ -45,10 +45,10 @@ stediEventsStreamingDF.withColumn("value", from_json("value", customerRiskSchema
     .select(col("value.*"))\
     .createOrReplaceTempView("CustomerRisk")
 
-# TO-DO: execute a sql statement against a temporary view, selecting the customer and the score from the temporary view, creating a dataframe called customerRiskStreamingDF
+# execute a sql statement against a temporary view, selecting the customer and the score from the temporary view, creating a dataframe called customerRiskStreamingDF
 customerRiskStreaming = spark.sql("SELECT customer, score FROM CustomerRisk")
 
-# TO-DO: sink the customerRiskStreamingDF dataframe to the console in append mode
+# sink the customerRiskStreamingDF dataframe to the console in append mode
 # 
 # It should output like this:
 #
